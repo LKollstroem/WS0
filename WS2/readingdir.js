@@ -1,21 +1,19 @@
-function readdir(path, options, callback) {
-    callback = makeCallback(typeof options === 'function' ? options : callback);
-    options = getOptions(options, {});
-    path = toPathIfFileURL(path);
-    validatePath(path);
-  
-    const req = new FSReqWrap();
-    if (!options.withFileTypes) {
-      req.oncomplete = callback;
-    } else {
-      req.oncomplete = (err, result) => {
-        if (err) {
-          callback(err);
-          return;
-        }
-        getDirents(path, result, callback);
-      };
+ //Opettajan koodi:
+var fs = require("fs");
+
+fs.readdir(__dirname, (err, files) => {
+    if (err)
+        console.log(err);
+    else {
+        console.log("\nCurrent directory filenames:");
+        files.forEach(file => {
+            console.log(file);
+        })
     }
-    binding.readdir(pathModule.toNamespacedPath(path), options.encoding,
-                    !!options.withFileTypes, req);
-  }
+})
+//reads all the files in this directory WS2 
+//readingjson.js
+//routeswithactions.js
+//sampledata.json
+//writefile.txt
+//WS2.js
