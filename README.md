@@ -1,1 +1,1 @@
-# Fullstach course for school assignments and projects.
+# Fullstack course for school assignments and projects.
