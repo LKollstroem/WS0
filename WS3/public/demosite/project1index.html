@@ -1,0 +1,456 @@
+<!DOCTYPE HTML>
+<html style="position:absolute; left:150px; top:10px; border-radius:10px;" class="no-border" id="onstock-div">
+    <style>
+        body {background-color: powderblue;}
+        h1   {color: rgb(9, 9, 30);
+            font-family: Arial;}
+        html {color: rgb(9, 9, 30); font-family: Arial;} 
+        input, textarea {background-color: #D3D3D3;}
+        select {background-color: #D3D3D3;}
+        button {background-color: #D3D3D3;}
+		.topnav {
+		overflow: hidden;
+		background-color: powderblue;
+		}
+
+		.topnav a {
+		float: left;
+		color: black;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+		font-size: 17px;
+		border: 1px solid black;
+		padding: 8px
+		}
+
+		.topnav a:hover {
+		background-color: #D3D3D3;
+		color: black;
+		}
+
+		.topnav a.active {
+		background-color: #D3D3D3;
+		color: Black;
+		}
+    </style>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>STOCK MANAGEMENT</title>
+		<script src="http://code.jquery.com/jquery-3.6.1.min.js"></script>
+		
+	</head>
+	<body>
+		<div class="topnav">
+			<a class="active" href="project1index.html">Project1</a>
+			<a href="project2.html">Project2</a>
+
+		</div>
+		<h1>Stock</h1>
+
+        <label><b>Choose a product, how much you will reserve of it, and which warehouse you are taking it from:</b></label>
+        <br> 
+        <br> 
+        <br>
+        <form name="form1" id="form1">
+                <select name="default" onchange="showTotal()" id="product">
+                <option value="product">Choose product</option>
+                </select>
+            <div style="position:absolute; left:150px; top:179px;" class="no-border" id="onstock-div">
+                <label>
+                <input style="background:lightgrey" type="text" name="onstock" id="onstock" readonly>
+                On stock<br>
+                </label>
+            </div>
+            <br>
+            <br>
+            <div class="no-border" id="reserve-div">
+                <label>
+                Reserve amount:<br>
+                <input type="text" name="reserve" id="reserve" required>
+                </label>
+            </div>
+            <br>
+            <p>From which warehouse?</p>
+                <select name="warehouse" id="warehouseNo">
+                <option value="default">Choose warehouse</option>
+                <option value="warehouse1">Warehouse 1</option>
+                <option value="warehouse2">Warehouse 2</option>
+                <option value="warehouse3">Warehouse 3</option>
+                </select>
+            <br>
+            <p>Where will it be used?</p>
+                <select name="room" id="roomNo">
+                <option value="default">Choose room</option>
+                <option value="room1">Room 1</option>
+                <option value="room2">Room 2</option>
+                <option value="room3">Room 3</option>
+                </select>
+            <br>
+            <br>
+            <input type="submit" onclick="calculations()" value="Save">
+        </form>
+        <br>
+        <p><b>See stock status</b></p>
+
+	    <table style="background-color:powderblue" id="warehouse" class="display" cellspacing="0" width="110%"  border="1">
+			<thead>
+				<tr>
+					<td>product</td>
+					<td>origin</td>
+					<td>warehouse1</td>
+					<td>warehouse2</td>
+					<td>warehouse3</td>
+					<td>total</td>
+					<td>room1</td>
+					<td>room2</td>
+					<td>room3</td>
+				</tr>
+			</thead>
+			<tbody onoad="loadTable()">	
+			</tbody>
+			<tfoot>		
+				<tr>
+					<td colspan="5" style="text-align: left;">>
+						<input type = "text" name="product" class="tableControl"/>
+					</td>
+					<td class = "room3">
+						<input type="button" class="btn btn-lg btn-block " id="addrow" value="Add Row" />
+					</td>
+				</tr>
+			</tfoot>	
+		</table>
+		<br>
+		<p>To update stock status please add new products or update old product here. </p>
+        <br>
+        <button id="addproduct" onclick="addProduct()">Add product</button>
+	    <br>
+		<br>
+		<div class="no-border" id="additionalbuttons">
+			<label>
+				Product name:<br>
+			<input type="text" name="reserve" id="productname" required>
+			</label>
+			<br>
+			<br>
+			<label>
+				Total amount:<br>
+				<input type="text" name="reserve" id="productamount" required>
+			</label>
+			<p>To which warehouse?</p>
+			<select name="warehouseNo2" id="warehouseNo2">
+			<option value="default">Choose warehouse</option>
+			<option value="warehouse1">Warehouse 1</option>
+			<option value="warehouse2">Warehouse 2</option>
+			<option value="warehouse3">Warehouse 3</option>
+			</select>
+		<br>
+		<br>
+		<input id="save" type="submit2" onclick="addRows()" value="Save">
+		</div>
+		<p>Click refresh to refresh screen after updating old product.</p>
+        <script>	
+		</script>
+        <script>
+//CREATE TABLE FIRST HEADER ROW:		
+//Make object:	
+			const heading = '{"Product":"", "Origin":"", "Warehouse1":"", "Warehouse2":"", "Warehouse3":"", "Total":"", "Room1":"", "Room2":"", "Room3":"" }';
+			const objectNotation = JSON.parse(heading);
+//Make first line in table with loop
+			let text = "<table border='1'>";
+			for (const x in objectNotation) {
+  				text += "<th>" + x + "</th>";
+			}
+			document.getElementById("warehouse").innerHTML = text;	
+
+
+
+//ADD PRODUCTS BUTTON AND SHOW MORE FIELDS AND BUTTON FOR ADDING PRODUCT:
+			var x = document.getElementById('additionalbuttons'); 
+            x.style.display = "none";
+			function addProduct(){
+                var additionalbuttons = document.getElementById('additionalbuttons');
+                additionalbuttons.style.display = "block";
+			}
+
+//SAVE NEW PRODUCT DATA BY ADDING ROWS, entering values and saving to local storage:
+			function addRows(){
+				let product = document.getElementById('productname').value;
+				let origin = document.getElementById('productamount').value;
+				if(document.getElementById('productamount').value >= '1'){
+					if(document.getElementById('warehouseNo2').value == 'warehouse1'){
+						var warehouse1 = document.getElementById('productamount').value;		
+						var warehouse2 = "";
+						var warehouse3 = "";
+						var total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+						var room1 = "";
+						var room2 = "";
+						var room3 = "";	
+						const warehouselist ={
+							product: document.getElementById("productname").value,
+							origin: document.getElementById("productamount").value,
+							warehouse1: document.getElementById("productamount").value,
+							warehouse2: "",
+							warehouse3: "",
+							total: Number(warehouse1) + Number(warehouse2) + Number(warehouse3),
+							room1: "",
+							room2: "",
+							room3: ""
+						}
+//put in local storage
+						localStorage.setItem(product, JSON.stringify(warehouselist));
+					}
+					else if(document.getElementById('warehouseNo2').value == 'warehouse2'){
+						var warehouse2 = document.getElementById('productamount').value;
+						var warehouse1 = "";
+						var warehouse3 = "";
+						var total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+						var room1 = "";
+						var room2 = "";
+						var room3 = "";	
+						const warehouselist ={
+							product: document.getElementById("productname").value,
+							origin: document.getElementById("productamount").value,
+							warehouse1: "",
+							warehouse2: document.getElementById("productamount").value,
+							warehouse3: "",
+							total: Number(warehouse1) + Number(warehouse2) + Number(warehouse3),
+							room1: "",
+							room2: "",
+							room3: ""
+						}
+//put in local storage
+						localStorage.setItem(product, JSON.stringify(warehouselist));
+
+					}
+					else if(document.getElementById('warehouseNo2').value == 'warehouse3'){
+						var warehouse3 = document.getElementById('productamount').value;
+						var warehouse2 = "";
+						var warehouse1 = "";
+						var total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+						var room1 = "";
+						var room2 = "";
+						var room3 = "";	
+						const warehouselist ={
+							product: document.getElementById("productname").value,
+							origin: document.getElementById("productamount").value,
+							warehouse1: "",
+							warehouse2: "",
+							warehouse3: document.getElementById("productamount").value,
+							total: Number(warehouse1) + Number(warehouse2) + Number(warehouse3),
+							room1: "",
+							room2: "",
+							room3: ""
+						}
+//put in local storage		
+						localStorage.setItem(product, JSON.stringify(warehouselist));
+					}
+				}else{
+					alert('value under 1!');
+				}	
+//Add to warehouse table as last
+				let table = document.getElementById("warehouse");
+				let lastRowIndex = table.rows.length;
+				let cellCount = table.rows[0].cells.length; 
+//Add rows
+				let rows = table.insertRow(lastRowIndex);
+//Add td elements to the new tr element
+				let cell1 = rows.insertCell(0);
+				let cell2 = rows.insertCell(1);
+				let cell3 = rows.insertCell(2);
+				let cell4 = rows.insertCell(3);
+				let cell5 = rows.insertCell(4);
+				let cell6 = rows.insertCell(5);
+				let cell7 = rows.insertCell(6);
+				let cell8 = rows.insertCell(7);
+				let cell9 = rows.insertCell(8);
+//Cell names
+				cell1.innerHTML = product;
+				cell2.innerHTML = origin;
+				cell3.innerHTML = warehouse1;
+				cell4.innerHTML = warehouse2;
+				cell5.innerHTML = warehouse3;
+				cell6.innerHTML = total;
+				cell7.innerHTML = room1;
+				cell8.innerHTML = room2;
+				cell9.innerHTML = room3;
+			}	
+//Load productdropdown only works without function:
+//first get all keys				
+			for (var i = 0; i < localStorage.length; i++) {
+				var key = localStorage.key(i);
+				var value = localStorage.getItem(key);  				
+//then use the keys to make options to the dropdown	
+				let option = document.createElement('option');
+				option.value = key;
+				option.innerHTML = key;	
+				let select = document.getElementById('product');
+				select.appendChild(option);	
+				
+//Direct download of table from local storage:
+//First get all the values:
+				let product = key;
+				let origin = ('origin: ',JSON.parse(localStorage.getItem(key)).origin);
+				let warehouse1 = ('warehouse1: ',JSON.parse(localStorage.getItem(key)).warehouse1);
+				let warehouse2 = ('warehouse2: ',JSON.parse(localStorage.getItem(key)).warehouse2);
+				let warehouse3 = ('warehouse3: ',JSON.parse(localStorage.getItem(key)).warehouse3);
+				let total = ('total: ',JSON.parse(localStorage.getItem(key)).total);
+				let room1 = ('room1: ',JSON.parse(localStorage.getItem(key)).room1);
+				let room2 = ('room2: ',JSON.parse(localStorage.getItem(key)).room2);
+				let room3 = ('room3: ',JSON.parse(localStorage.getItem(key)).room3);
+//add to warehouse table as last
+				var table = document.getElementById("warehouse");
+				var lastRowIndex = table.rows.length;
+				var cellCount = table.rows[0].cells.length;
+//create rows in table <tr></tr> rows in table		
+				var rows = table.insertRow(lastRowIndex);
+//Add td elements to the new tr element
+				var cell1 = rows.insertCell(0);
+				var cell2 = rows.insertCell(1);
+				var cell3 = rows.insertCell(2);
+				var cell4 = rows.insertCell(3);
+				var cell5 = rows.insertCell(4);
+				var cell6 = rows.insertCell(5);
+				var cell7 = rows.insertCell(6);
+				var cell8 = rows.insertCell(7);
+				var cell9 = rows.insertCell(8);
+//Cell names
+				cell1.innerHTML = product;
+				cell2.innerHTML = origin;
+				cell3.innerHTML = warehouse1;
+				cell4.innerHTML = warehouse2;
+				cell5.innerHTML = warehouse3;
+				cell6.innerHTML = total;
+				cell7.innerHTML = room1;
+				cell8.innerHTML = room2;
+				cell9.innerHTML = room3;
+			}
+
+// Available on stock amount when product chosen      
+			function showTotal(){
+				for (var i = 0; i < localStorage.length; i++) {
+					var key = localStorage.key(i);
+					var value = localStorage.getItem(key);  
+					let total = ('total: ',JSON.parse(localStorage.getItem(key)).total);
+					if (document.getElementById("product").value == key) {
+						document.getElementById("onstock").value = total;
+						console.log("It works");
+					}else{
+					//	alert('Please choose a product!');
+					}
+				}   
+			}	
+// Save button - saves changes to table stocks: count total, rooms and warehouses
+            function calculations(){
+				for (var i = 0; i < localStorage.length; i++) {
+					var key = localStorage.key(i);
+					var value = localStorage.getItem(key); 
+					let product = key;
+					let origin = ('origin: ',JSON.parse(localStorage.getItem(key)).origin);
+					let warehouse1 = ('warehouse1: ',JSON.parse(localStorage.getItem(key)).warehouse1);
+					let warehouse2 = ('warehouse2: ',JSON.parse(localStorage.getItem(key)).warehouse2);
+					let warehouse3 = ('warehouse3: ',JSON.parse(localStorage.getItem(key)).warehouse3);
+					let total = ('total: ',JSON.parse(localStorage.getItem(key)).total);
+					let room1 = ('room1: ',JSON.parse(localStorage.getItem(key)).room1);
+					let room2 = ('room2: ',JSON.parse(localStorage.getItem(key)).room2);
+					let room3 = ('room3: ',JSON.parse(localStorage.getItem(key)).room3);
+					var reserve = document.getElementById('reserve').value;	
+					if (document.getElementById("product").value == key) {
+						if(document.getElementById('warehouseNo').value == 'warehouse1'){
+							if(document.getElementById('roomNo').value == 'room1' && warehouse1 !=0){
+								warehouse1 = (Number(warehouse1) - Number(reserve));	
+								room1 = (Number(room1) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);				
+							}else if(document.getElementById('roomNo').value == 'room2' && warehouse1 !=0){
+								warehouse1 = (Number(warehouse1) - Number(reserve));	
+								room2 = (Number(room2) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);	
+							}else if(document.getElementById('roomNo').value == 'room3' && warehouse1 !=0){
+								warehouse1 = (Number(warehouse1) - Number(reserve));	
+								room3 = (Number(room3) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+							}else{
+								alert('Please fill in all fields or check that there is stock in the chosen warehouse!');
+							}       
+						}else if(document.getElementById('warehouseNo').value == 'warehouse2'){
+							if(document.getElementById('roomNo').value == 'room1' && warehouse2 !=0){
+								warehouse2 = (Number(warehouse2) - Number(reserve));	
+								room1 = (Number(room1) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+							}else if(document.getElementById('roomNo').value == 'room2' && warehouse2 !=0){
+								warehouse2 = (Number(warehouse2) - Number(reserve));	
+								room2 = (Number(room2) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+							}else if(document.getElementById('roomNo').value == 'room3' && warehouse2 !=0){
+								warehouse2 = (Number(warehouse2) - Number(reserve));	
+								room3 = (Number(room3) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+							}else{
+								alert('Please fill in all fields or check that there is stock in the chosen warehouse!');   
+							}	  
+						}else if(document.getElementById('warehouseNo').value == 'warehouse3'){
+							if(document.getElementById('roomNo').value == 'room1' && warehouse3 !=0){
+								warehouse3 = (Number(warehouse2) - Number(reserve));	
+								room1 = (Number(room1) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+							}else if(document.getElementById('roomNo').value == 'room2' && warehouse3 !=0){
+								warehouse3 = (Number(warehouse2) - Number(reserve));	
+								room2 = (Number(room2) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+							}else if(document.getElementById('roomNo').value == 'room3' && warehouse3 !=0){
+								warehouse3 = (Number(warehouse2) - Number(reserve));	
+								room3 = (Number(room3) + Number(reserve));
+								total = Number(warehouse1) + Number(warehouse2) + Number(warehouse3);
+							}else{
+								alert('Please fill in all fields or check that there is stock in the chosen warehouse!');
+							}       
+						}else{
+							alert('Please fill in all fields');
+						}
+						const warehouselist ={
+							product: product,
+							origin: origin,
+							warehouse1: warehouse1,
+							warehouse2: warehouse2,
+							warehouse3: warehouse3,
+							total: total,
+							room1: room1,
+							room2: room2,
+							room3: room3
+						}
+// put into local storage
+						localStorage.setItem(product, JSON.stringify(warehouselist));
+//Add to warehouse table as last
+						let table = document.getElementById("warehouse");
+						let lastRowIndex = table.rows.length;
+						let cellCount = table.rows[0].cells.length; 
+//Add rows
+						let rows = table.insertRow(lastRowIndex);
+//Add td elements to the new tr element
+						let cell1 = rows.insertCell(0);
+						let cell2 = rows.insertCell(1);
+						let cell3 = rows.insertCell(2);
+						let cell4 = rows.insertCell(3);
+						let cell5 = rows.insertCell(4);
+						let cell6 = rows.insertCell(5);
+						let cell7 = rows.insertCell(6);
+						let cell8 = rows.insertCell(7);
+						let cell9 = rows.insertCell(8);
+		//Cell names
+						cell1.innerHTML = product;
+						cell2.innerHTML = origin;
+						cell3.innerHTML = warehouse1;
+						cell4.innerHTML = warehouse2;
+						cell5.innerHTML = warehouse3;
+						cell6.innerHTML = total;
+						cell7.innerHTML = room1;
+						cell8.innerHTML = room2;
+						cell9.innerHTML = room3;
+					}
+				}	
+			}		
+        </script>
+    </body>
+</html>

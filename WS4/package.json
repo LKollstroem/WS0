@@ -1,0 +1,17 @@
+{
+  "name": "ws4",
+  "version": "1.0.0",
+  "description": "ws4",
+  "main": "task1.js",
+  "scripts": {
+    "test": "node task1.js"
+  },
+  "author": "Leena",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^5.1.0",
+    "mysql": "^2.18.1",
+    "sails": "^1.5.4"
+  }
+}

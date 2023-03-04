@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html style="position:absolute; left:150px; top:10px;" class="no-border">
+	<head>
+		<link rel="stylesheet" href="styles.css">
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Music API</title>
+	</head>
+	<body>
+		<div class="topnav">
+			<a  href="project1index.html">Project1</a>
+			<a class="active" href="project2.html">Project2</a>
+		</div>
+		<h1>Music</h1>
+        <br> 
+		<p><b>Please click on the artist name to get more information about their albums, songs and more</b></p>
+		
+		<div id="artist-div">
+			<table id="artist-table" ></table>
+			<tr>
+				<td></td>
+			</tr>
+			<p id='moreInformation'></p>
+			<p id='evenMore'></p>
+		</div>
+		<br>
+		<br>
+		<label for="site-search"><b>Search for another artist:</b></label>
+		<br>
+		<br>
+		<input type="search" id="artist-search">
+		<button id="searchbutton">Search artist</button>
+		<form>
+			<label>
+				<br><b>You searched for:</b><br>
+                <p id="artistinfo"></p>   
+            </label>
+		</form>
+		<br>
+		<br>
+	<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1XemRYgtQxol3lrQo9qdq6?utm_source=generator" width="100%" height="400" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+		<script src="script.js">
+		</script>
+	</body>
+</html>
+

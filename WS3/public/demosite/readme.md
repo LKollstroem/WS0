@@ -1,0 +1,7 @@
+Made by Leena Kollstrøm
+
+https://github.com/LKollstroem/Music Netifly worked on first project but when I changed the site it complains about using http i https, and here the http are the api's used so it gives error. Otherwise everything works but table only allows to click on first name and does not work on rest of the names. Hoping for extra points for the customized search and for combining 2 api's in the table click. Because of these missing things I guess a 3-4 would be ok as evaluation so maybe 25-30 points. Thank you for the amazing course though! Even if it was very difficult I believe I have learned more than on any other course because I have been sitting hundreds of hours coding :) And just a comment: Last fm has removed all images because of gdpr so there are only star images in different sizes. And I added a just for fun sportify player with the first artist, because last fm does not give it for free as I understood. Added a zip folder, so you have all connections. I do not know how to make a presentation video.
+
+# Music
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e204666a-1e85-46a1-8318-5820003a02f1/deploy-status)](https://app.netlify.com/sites/musicapis/deploys)
+0 comments on commit 900fffe
